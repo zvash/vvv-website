@@ -51,7 +51,7 @@ const Login: NextPage = () => {
             <Box>
                 <form onSubmit={handleSubmit}>
                     <Input
-                        label='Phone'
+                        label='Identifier'
                         changed={(value) => setFieldValue('username', value)}
                         blurred={() => setFieldTouched('username')}
                         error={touched.username && errors.username}

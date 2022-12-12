@@ -79,7 +79,7 @@ const Login: NextPage = () => {
                         value={values.name}
                     />
                     <Input
-                        label='Phone'
+                        label='Identifier'
                         changed={(value) => setFieldValue('phone', value)}
                         blurred={() => setFieldTouched('phone')}
                         error={touched.phone && errors.phone}
@@ -101,7 +101,7 @@ const Login: NextPage = () => {
                         value={values.password_confirmation}
                     />
                     <Input
-                        label='Referrer phone'
+                        label='Referrer Identifier'
                         changed={(value) => setFieldValue('referrer_phone', value)}
                         blurred={() => setFieldTouched('referrer_phone')}
                         error={touched.referrer_phone && errors.referrer_phone}
