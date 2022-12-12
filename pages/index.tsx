@@ -28,7 +28,7 @@ const Index: NextPage = () => {
         }
       })
         .then(res => {
-          setSubscription(res.data.subscription_link)
+          setSubscription(`${process.env.NEXT_PUBLIC_APP_URL}${res.data.data.subscription_link}`)
         })
         .catch(err => {
           console.log(err.response)
@@ -38,15 +38,15 @@ const Index: NextPage = () => {
         })
     }
   }, [session])
+
   useEffect(() => {
-    if(copyState) {
+    if (copyState.value) {
       setCopied(true)
       setTimeout(() => {
         setCopied(false)
       }, 5000);
     }
   }, [copyState])
-
 
   const createSubscription = () => {
     if (session) {
@@ -57,8 +57,7 @@ const Index: NextPage = () => {
         }
       })
         .then(res => {
-          console.log(res)
-          setSubscription(res.data.subscription_link)
+          setSubscription(`${process.env.NEXT_PUBLIC_APP_URL}${res.data.data.subscription_link}`)
         })
         .catch(err => {
           console.log(err.response)
@@ -81,7 +80,7 @@ const Index: NextPage = () => {
       </Head>
 
       <Box>
-        <h2>Hello, Farbod</h2>
+        <h2>Hello, </h2>
 
         {subscription ? (
           <div className="InfoWrapper">
@@ -97,7 +96,7 @@ const Index: NextPage = () => {
           </div>
         ) : (
           <div className="Actions">
-            <Button onClick={() => createSubscription()} disabled={loading}>Create subscription</Button>
+            <Button onClick={() => createSubscription()} disabled={loading}>{loading ? 'Loading' : 'Create subscription'}</Button>
           </div>
         )}
 
