@@ -28,7 +28,9 @@ const Index: NextPage = () => {
         }
       })
         .then(res => {
-          setSubscription(`${process.env.NEXT_PUBLIC_APP_URL}${res.data.data.subscription_link}`)
+          if (res.data.data.subscription_link != null) {
+            setSubscription(`${process.env.NEXT_PUBLIC_APP_URL}${res.data.data.subscription_link}`)
+          }
         })
         .catch(err => {
           console.log(err.response)

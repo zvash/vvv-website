@@ -42,15 +42,15 @@ const Login: NextPage = () => {
             setError('')
             await register(values).then(async res => {
                 const result = await signIn('credentials', {
-                    redirect: true,
+                    redirect: false,
                     username: values.phone,
                     password: values.password,
-                });
-
-                if (result?.status == 401) {
+                })
+    
+                if (result?.error) {
                     setError('Invalid username or password');
                 }
-                if (result?.ok) {
+                else {
                     router.push('/');
                     return;
                 }
@@ -111,7 +111,7 @@ const Login: NextPage = () => {
                     {error ? (<ErrorMessage style={{ textAlign: 'center', marginTop: 12 }}>{error}</ErrorMessage>) : null}
                     <div className="ButtonsWrapper">
                         <Link href="/auth/login" className='RegisterLink'>Already registered?</Link>
-                        <Button>Register</Button>
+                        <Button type='submit'>Register</Button>
                     </div>
                 </form>
             </Box>

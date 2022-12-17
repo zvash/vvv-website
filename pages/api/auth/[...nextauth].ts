@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
                         username: credentials.username,
                         password: credentials.password,
                     });
-                    // console.log(data)
+                    console.log(data)
                     return {
                         id: uuid(),
                         token_type: "Bearer",
