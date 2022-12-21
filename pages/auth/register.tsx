@@ -21,7 +21,7 @@ const validationSchema = yup.object().shape({
     phone: yup.string().required('This field is required'),
     password: yup.string().required('This field is required'),
     password_confirmation: yup.string().oneOf([yup.ref('password')], 'Passwords must match').required('This field is required'),
-    referrer_phone: yup.string().required('This field is required'),
+    //referrer_phone: yup.string().required('This field is required'),
 })
 
 
