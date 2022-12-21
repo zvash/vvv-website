@@ -14,6 +14,7 @@ import ErrorMessage from '../../components/styled/ErrorMessage'
 import { RegisterErrorResponse } from '../../services/auth/auth'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { Loading } from '../../components/styled/Loading'
 
 const validationSchema = yup.object().shape({
     name: yup.string().required('This field is required'),
@@ -30,7 +31,7 @@ const Login: NextPage = () => {
     const [error, setError] = useState('')
     const router = useRouter()
 
-    const { handleSubmit, values, errors, touched, setFieldValue, setFieldTouched } = useFormik({
+    const { handleSubmit, values, errors, touched, setFieldValue, setFieldTouched, isSubmitting, isValid } = useFormik({
         initialValues: {
             name: '',
             phone: '',
@@ -46,7 +47,7 @@ const Login: NextPage = () => {
                     username: values.phone,
                     password: values.password,
                 })
-    
+
                 if (result?.error) {
                     setError('Invalid username or password');
                 }
@@ -111,7 +112,7 @@ const Login: NextPage = () => {
                     {error ? (<ErrorMessage style={{ textAlign: 'center', marginTop: 12 }}>{error}</ErrorMessage>) : null}
                     <div className="ButtonsWrapper">
                         <Link href="/auth/login" className='RegisterLink'>Already registered?</Link>
-                        <Button type='submit'>Register</Button>
+                        <Button type='submit' disabled={isSubmitting || !isValid}>{isSubmitting ? <Loading /> : 'Register'}</Button>
                     </div>
                 </form>
             </Box>

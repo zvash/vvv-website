@@ -5,6 +5,12 @@ import { signIn } from "../../../services/auth/login";
 import type { NextAuthOptions } from 'next-auth'
 import { v4 as uuid } from 'uuid'
 
+interface AuthenticatedUser {
+    data: {
+        name: string
+    }
+}
+
 export const authOptions: NextAuthOptions = {
     debug: false,
     providers: [
@@ -21,7 +27,7 @@ export const authOptions: NextAuthOptions = {
                         username: credentials.username,
                         password: credentials.password,
                     });
-                    console.log(data)
+                    // console.log(data)
                     return {
                         id: uuid(),
                         token_type: "Bearer",
@@ -44,7 +50,22 @@ export const authOptions: NextAuthOptions = {
     },
     callbacks: {
         session: async ({ session, token, user }) => {
-            session.user = token.user;
+
+            const userData = await axios.get<AuthenticatedUser>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/me`, {
+                headers: { 'Authorization': `Bearer ${token.user.token}` }
+            }).then((res) => {
+                return res.data.data;
+            }).catch((err) => {
+                console.log(err.response)
+            });
+
+            if (!userData) {
+                return Promise.reject('token-expired');
+            }
+            session.user = {
+                ...token.user,
+                name: userData.name
+            };
             return Promise.resolve(session);
         },
         jwt: async ({ token, user }) => {

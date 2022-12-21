@@ -8,6 +8,7 @@ declare module "next-auth" {
         expires_in: number,
         token: string,
         refresh_token: string
+        name: string
     }
     interface Session {
         // id: number,

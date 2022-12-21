@@ -11,6 +11,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { AxiosError } from 'axios'
 import ErrorMessage from '../../components/styled/ErrorMessage'
+import { Loading } from '../../components/styled/Loading'
 
 const validationSchema = yup.object().shape({
     username: yup.string().required('This field is required'),
@@ -68,7 +69,7 @@ const Login: NextPage = () => {
                     {error ? (<ErrorMessage style={{ textAlign: 'center', marginTop: 12 }}>{error}</ErrorMessage>) : null}
                     <div className="ButtonsWrapper">
                         <Link href="/auth/register" className='RegisterLink'>Create account?</Link>
-                        <Button type='submit' disabled={isSubmitting || !isValid}>Log in</Button>
+                        <Button type='submit' disabled={isSubmitting || !isValid}>{isSubmitting ? <Loading /> : 'Log in'}</Button>
                     </div>
                 </form>
             </Box>
