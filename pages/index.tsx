@@ -9,6 +9,7 @@ import { authOptions } from '../pages/api/auth/[...nextauth]'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useCopyToClipboard } from 'react-use'
+import { Loading } from '../components/styled/Loading'
 
 const Index: NextPage = () => {
 
@@ -17,6 +18,7 @@ const Index: NextPage = () => {
   const [subscription, setSubscription] = useState('')
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [remainingInvites, setRemainingInvites] = useState(0)
   const [copyState, copyToClipboard] = useCopyToClipboard();
 
   useEffect(() => {
@@ -50,6 +52,27 @@ const Index: NextPage = () => {
     }
   }, [copyState])
 
+  const getRemainingInvites = () => {
+    if (session) {
+      axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/remained-invitations`, {
+        headers: {
+          "Authorization": `Bearer ${session.user?.token}`
+        }
+      })
+        .then((res) => { 
+          setRemainingInvites(res.data.data.invitation_count)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+        .finally(() => {
+        })
+    }
+  }
+  useEffect(() => {
+    getRemainingInvites()
+  }, [session])
+
   const createSubscription = () => {
     if (session) {
       setLoading(true);
@@ -71,8 +94,6 @@ const Index: NextPage = () => {
     }
   }
 
-
-
   return (
     <DashboardWrapper>
       <Head>
@@ -82,11 +103,11 @@ const Index: NextPage = () => {
       </Head>
 
       <Box>
-        <h2>Hello, </h2>
+        <h2>Hello, {session?.user?.name}</h2>
 
         {subscription ? (
           <div className="InfoWrapper">
-            {/* <h3>You have <strong>3</strong> invites remaining!</h3> */}
+            <h3>You have <strong>{remainingInvites}</strong> invites remaining!</h3>
             <h4>Your configuration link</h4>
             <div className='DetailRow'>
               <div>{subscription}</div>
@@ -98,7 +119,7 @@ const Index: NextPage = () => {
           </div>
         ) : (
           <div className="Actions">
-            <Button onClick={() => createSubscription()} disabled={loading}>{loading ? 'Loading' : 'Create subscription'}</Button>
+            <Button onClick={() => createSubscription()} disabled={loading}>{loading ? <Loading /> : 'Create subscription'}</Button>
           </div>
         )}
 
